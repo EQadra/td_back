@@ -20,11 +20,14 @@ class RatingSeeder extends Seeder
         }
 
         $users->each(function ($user) use ($products) {
-            // Tomar un producto aleatorio que aún no haya sido calificado por este usuario
             $product = $products->random();
 
             Rating::firstOrCreate(
-                ['user_id' => $user->id, 'product_id' => $product->id],
+                [
+                    'user_id' => $user->id,
+                    'rateable_id' => $product->id,
+                    'rateable_type' => \App\Models\Product::class,
+                ],
                 [
                     'score' => rand(1, 5),
                     'comment' => fake()->sentence(),

@@ -31,4 +31,8 @@ class Product extends Model
     {
         return $this->hasMany(Like::class);
     }
+    public function ratings()
+{
+    return $this->morphMany(Rating::class, 'rateable');
+}
 }

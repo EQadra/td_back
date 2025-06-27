@@ -9,15 +9,21 @@ class Rating extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['rater_id', 'rated_id', 'score', 'comment'];
+    protected $fillable = [
+        'user_id',
+        'rateable_id',
+        'rateable_type',
+        'score',
+        'comment',
+    ];
 
-    public function rater()
+    public function user()
     {
-        return $this->belongsTo(User::class, 'rater_id');
+        return $this->belongsTo(User::class);
     }
 
-    public function rated()
+    public function rateable()
     {
-        return $this->belongsTo(User::class, 'rated_id');
+        return $this->morphTo();
     }
 }

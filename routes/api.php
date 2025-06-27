@@ -95,6 +95,7 @@ Route::apiResource('stores', StoreController::class);
 Route::apiResource('associations', AssociationController::class);
 
 Route::apiResource('products', ProductController::class);
+Route::get('/products/{product}/ratings', [ProductController::class, 'ratings']);
 Route::apiResource('categories', CategoryController::class);
 Route::apiResource('news', NewsController::class);
 Route::apiResource('comments', CommentController::class)->only(['index', 'store', 'destroy']);

@@ -4,6 +4,8 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Product;
+use App\Models\Rating;
 
 class ProductController extends Controller
 {
@@ -20,11 +22,19 @@ class ProductController extends Controller
             'price' => 'required|numeric',
             'image' => 'nullable|string'
         ]);
+
         return Product::create($data);
     }
 
     public function show(Product $product) {
-        return $product->load(['category', 'user', 'comments', 'likes']);
+        $product->load(['category', 'user', 'comments', 'likes', 'ratings']);
+
+        $averageRating = $product->ratings()->avg('score');
+
+        return response()->json([
+            'product' => $product,
+            'average_rating' => round($averageRating, 2)
+        ]);
     }
 
     public function update(Request $request, Product $product) {
@@ -35,6 +45,7 @@ class ProductController extends Controller
             'image' => 'nullable|string',
             'category_id' => 'nullable|exists:categories,id'
         ]);
+
         $product->update($data);
         return $product;
     }
@@ -42,5 +53,10 @@ class ProductController extends Controller
     public function destroy(Product $product) {
         $product->delete();
         return response()->noContent();
+    }
+
+    // Nuevo método para obtener los ratings de un producto
+    public function ratings(Product $product) {
+        return $product->ratings()->with('user')->latest()->get();
     }
 }

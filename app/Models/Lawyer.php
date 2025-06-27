@@ -20,4 +20,9 @@ class Lawyer extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function ratings()
+{
+    return $this->morphMany(Rating::class, 'rateable');
+}
 }
